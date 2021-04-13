@@ -1,0 +1,107 @@
+git é um CLI (comand line inteface) e não um GUI(graphic user interface)
+
+Comandos Windows:
+- Mudar pasta: $cd
+- Listar Pasta: $dir
+- Criar Pasta/arquivo: $mkdir
+- Deletar Pasta/arquivo: $del/rmdir
+
+Comandos Linux, MAC, e demais derivados do UNIX:
+- Mudar pasta: $cd
+- Listar Pasta: $ls
+- Criar Pasta/arquivo: $mkdir
+- Deletar Pasta/arquivo: $-rm -rf
+
+
+criando e deletando arquivo ex:
+cd 3-Git e Github
+echo hello > hello.txt
+del hello.txt
+cd ..
+
+criando e deletando diretório ex:
+cd 3-Git e Github
+mkdir teste
+cd teste
+echo hello > hello.txt
+cd ..
+rmdir teste /s /q
+obs: /s remove recursivamente, com todos os arquivos dentro(ele pegunta se deseja prosseguir s/n)./ q remove sem erxibir alerta.
+
+principais diferenças 
+
+// entendendo como o git funciona por baixo dos panos 
+
+#sha1 > algoritimo de envcriptação (secure hash algorithm) > gera um conjunto de caracteres de 40 dígitos que servem como identifição. Um arquivo com os mesmos caracteres gera o mesmo código de encriptação.
+ex: usar no gitbash
+    echo "ola mundo" | openssl sha1
+    retorno : (stdin)= d9802fa01c4c1dfc4ddaf61f766d8d56ad8a8699
+ex2: criar arquivo de texto lorem ipsum
+    $ openssl sha1 teste_sha1.txt
+    SHA1(teste_sha1.txt)= f7707bcf27c94d96756171b1c5bac6c86ef52f3a
+ex3: altere um único caracter no arquivo e perceba que o git altera o sha1
+    $ openssl sha1 teste_sha1.txt
+    SHA1(teste_sha1.txt)= cff615777622079b861cea29ab5474c6fbbd2a08
+
+#objetos do git : blobs, trees e commits
+BLOB
+criaremos uma encriptação via função git e via openssl
+ex: $ echo 'conteudo' | git hash-object --stdin    (retorna o sha1 via função git)
+    fc31e91b26cf85a55e072476de7f263c89260eb1
+    $ echo 'conteudo' | openssl sha1             (pelo openssl é diferente) 
+    (stdin)= 65b0d0dda479cc03cce59528e28961e498155f5c 
+
+#Essa diferença ocorre porque o git cria um objeto do tipo blob (bolha) que contém não só o conteúdo do objeto, mas também metadados como tipo do objeto, tamanho da string, uma '\0', etc... Para o resultado ficar igual precisaríamos fazer:
+    $ echo -e 'blob 9\0conteudo' | openssl sha1
+    (stdin)= fc31e91b26cf85a55e072476de7f263c89260eb1
+
+Dessa forma, o Git guarda os arquivos fazendo encriptação, gerando metadados do objeto e guardadndo em um BLOB. BLOBs não guardam o nome, so o sha1.
+
+TREE
+A tree de forma semelhante contém metadados e apontam para um blob ou outra tree, e contém o nome do arquivo, sha1 além de metadados de toda a estrutura contida.
+
+COMMITS
+Apontam para árvores, parentes (último commit), autor e mensagem. 
+
+
+Iniciando o Git
+criei uma pasta workspace/livro_receitas
+git init (inicia o Repositório, cria uma pasta oculta .git)
+ls -a (mostra arquivos ocultos podemos entrar na .git e ver os armazenados)
+git config --global user.email rafarsp89@gmail.com (configura email de usuario)
+git config --global user.name rafarsp (configura usuario)
+
+git add * (adiciona arquivo, no caso com *, todos)
+git commit -m"<mensagem>"(da o commit com mensagem)
+
+
+Ciclo de vida dos arquivos no git
+Arquivos em Repositórios podem ser divididos Tracked (rastreado pelo git) e untracked(não rastreado pelo git)
+Os arquivos Tracked podem ser unmodified, modified e staged
+
+se o arquivo esta untracked ou unmodified. o git add move para staged. 
+os arquivos unmodified, ao sofrer modificação vira modified. com add vira staged.
+se o arquivo é unmodified e é removido, vira untracked.
+arquivo staged estao se preparando para receberem commit, e retornarem para unmodified, com o snapshot do projeto salvo no commit.
+Repósitórios são as pastas locais(ambiente de desenvolvimento) e remotas() onde estão guardadas as versões de código.
+
+Github
+criar conta e user
+git config --list > verificar email e user
+
+limpando configs:
+git config --global --unset user.email
+git config --global --unset user.name
+
+criando o usuário correto
+git config --global user.email rafarsp89@gmail.com (configura email de usuario)
+git config --global user.name Cyber-Barbarian (configura usuario)
+
+apontar para o repositório 
+git remote add origin https://github.com/Cyber-Barbarian/Bootcamp_Java_Digital_Inovation_One.git
+
+cd '3-Git e Github'/workspace/livro_receitas
+git remote -v
+git push origin master
+
+se olharmos na master, vai estar lá o livro de receitas
