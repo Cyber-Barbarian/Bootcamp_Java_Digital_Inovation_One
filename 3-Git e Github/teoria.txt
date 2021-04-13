@@ -103,5 +103,22 @@ git remote add origin https://github.com/Cyber-Barbarian/Bootcamp_Java_Digital_I
 cd '3-Git e Github'/workspace/livro_receitas
 git remote -v
 git push origin master
-
 se olharmos na master, vai estar lá o livro de receitas
+
+apagando
+git push origin --delete master
+criando nova branch 
+git checkout -b livro_receita
+git push origin livro_receita
+
+Resolvendo conflitos no github
+git status  (verifica alterações)
+
+se você não tem o trabalho localmente, vai dar um erro ao dar push. resolve fazendo um pull 
+ele aponta os arquivos com conflito de merge
+resolver os conflitos 
+
+fazer add, commit e push normais
+
+
+clonar repositório remoto > git clone > já vem com todas as configurações
